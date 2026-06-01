@@ -1,0 +1,8 @@
+flask
+flask-sqlalchemy
+flask-jwt-extended
+psycopg2-binary
+python-dotenv
+firebase-admin
+pip install flask flask-sqlalchemy flask-jwt-extended psycopg2-binary python-dotenv firebase-admin
+>> requirements.txt
