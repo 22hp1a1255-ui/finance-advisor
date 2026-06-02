@@ -14,4 +14,6 @@ def create_app():
     jwt.init_app(app)
     from app.auth import auth_bp
     app.register_blueprint(auth_bp, url_prefix='/api/v1/auth')
+    from app.routes.transactions import transactions_bp
+    app.register_blueprint(transactions_bp, url_prefix='/api/v1/transactions')
     return app

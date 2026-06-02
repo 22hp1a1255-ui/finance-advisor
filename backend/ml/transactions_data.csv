@@ -1,0 +1,146 @@
+description,category
+Swiggy order,Food
+Zomato delivery,Food
+Big Bazaar groceries,Food
+Reliance Fresh groceries,Food
+restaurant bill,Food
+lunch canteen,Food
+milk and bread,Food
+dinner outside,Food
+breakfast cafe,Food
+food delivery,Food
+pizza order,Food
+biryani order,Food
+grocery shopping,Food
+vegetable market,Food
+fruits purchase,Food
+Dominos pizza,Food
+KFC order,Food
+McDonald order,Food
+hotel food bill,Food
+mess fees,Food
+Uber ride,Transport
+Ola cab booking,Transport
+petrol bunk,Transport
+bus ticket,Transport
+metro card recharge,Transport
+auto fare,Transport
+Rapido bike,Transport
+fuel refill,Transport
+cab booking,Transport
+train ticket,Transport
+flight ticket,Transport
+toll charges,Transport
+parking charges,Transport
+bike service,Transport
+car service,Transport
+Uber auto,Transport
+InDrive cab,Transport
+railway ticket,Transport
+bus pass recharge,Transport
+vehicle insurance,Transport
+Netflix subscription,Entertainment
+Amazon Prime subscription,Entertainment
+Spotify premium,Entertainment
+movie ticket BookMyShow,Entertainment
+concert ticket,Entertainment
+gaming recharge,Entertainment
+YouTube premium,Entertainment
+Disney Hotstar,Entertainment
+SonyLiv subscription,Entertainment
+ZEE5 subscription,Entertainment
+video game purchase,Entertainment
+amusement park ticket,Entertainment
+cricket match ticket,Entertainment
+comedy show ticket,Entertainment
+event ticket,Entertainment
+electricity bill,Utilities
+water bill,Utilities
+Jio recharge,Utilities
+Airtel postpaid bill,Utilities
+broadband bill,Utilities
+gas cylinder,Utilities
+apartment rent,Utilities
+internet bill,Utilities
+DTH recharge,Utilities
+maintenance charges,Utilities
+society fees,Utilities
+BSNL recharge,Utilities
+Vi mobile recharge,Utilities
+landline bill,Utilities
+piped gas bill,Utilities
+hospital bill,Healthcare
+pharmacy medicine,Healthcare
+Apollo clinic visit,Healthcare
+doctor consultation,Healthcare
+health insurance premium,Healthcare
+gym membership,Healthcare
+diagnostic test,Healthcare
+medical checkup,Healthcare
+dental treatment,Healthcare
+eye checkup,Healthcare
+blood test,Healthcare
+scan charges,Healthcare
+physiotherapy,Healthcare
+vaccination,Healthcare
+medicine purchase,Healthcare
+Amazon purchase,Shopping
+Flipkart order,Shopping
+Myntra clothes,Shopping
+AJIO fashion,Shopping
+Meesho order,Shopping
+electronics purchase,Shopping
+book purchase,Shopping
+Nykaa beauty,Shopping
+Snapdeal order,Shopping
+clothes shopping,Shopping
+footwear purchase,Shopping
+accessories shopping,Shopping
+home decor purchase,Shopping
+kitchen items,Shopping
+stationery purchase,Shopping
+SBI loan EMI,Finance
+credit card payment,Finance
+mutual fund SIP,Finance
+LIC premium,Finance
+education loan EMI,Finance
+FD deposit,Finance
+stock purchase,Finance
+home loan EMI,Finance
+personal loan EMI,Finance
+car loan EMI,Finance
+insurance premium,Finance
+RD installment,Finance
+PPF deposit,Finance
+NPS contribution,Finance
+tax payment,Finance
+college fees,Education
+school fees,Education
+Udemy course purchase,Education
+Coursera subscription,Education
+books and stationery,Education
+tuition fees,Education
+exam registration fees,Education
+online course,Education
+certification exam,Education
+coaching fees,Education
+workshop fees,Education
+seminar registration,Education
+library fees,Education
+hostel fees,Education
+uniform purchase,Education
+salary credit,Income
+freelance payment received,Income
+business income,Income
+rental income received,Income
+dividend received,Income
+refund received,Income
+cashback credited,Income
+bonus received,Income
+interest credited,Income
+commission received,Income
+prize money,Income
+gift received,Income
+reimbursement,Income
+incentive received,Income
+part time income,Income
