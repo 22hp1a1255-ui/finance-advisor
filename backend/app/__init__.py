@@ -16,4 +16,8 @@ def create_app():
     app.register_blueprint(auth_bp, url_prefix='/api/v1/auth')
     from app.routes.transactions import transactions_bp
     app.register_blueprint(transactions_bp, url_prefix='/api/v1/transactions')
+    from app.routes.credit import credit_bp
+    app.register_blueprint(credit_bp, url_prefix='/api/v1/credit')
+    from app.routes.budget import budget_bp
+    app.register_blueprint(budget_bp, url_prefix='/api/v1/budget')
     return app
