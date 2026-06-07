@@ -5,6 +5,8 @@ const API = "https://finance-advisor-backend.onrender.com/api/v1";
 
 function Login({ onLogin }) {
   const [phone, setPhone] = useState("");
+  const [name, setName] = useState("");
+  const [isSignup, setIsSignup] = useState(false);
 
   const handleLogin = async () => {
     try {
@@ -15,13 +17,36 @@ function Login({ onLogin }) {
     }
   };
 
+  const handleSignup = async () => {
+    try {
+      const res = await axios.post(`${API}/auth/signup`, { phone_number: phone, name: name });
+      onLogin(res.data.token);
+    } catch {
+      alert("Signup failed. User may already exist.");
+    }
+  };
+
   return (
     <div style={styles.center}>
       <div style={styles.card}>
         <h2>💰 Finance Advisor</h2>
+        {isSignup && (
+          <input style={styles.input} placeholder="Your name"
+            value={name} onChange={e => setName(e.target.value)} />
+        )}
         <input style={styles.input} placeholder="Phone number"
           value={phone} onChange={e => setPhone(e.target.value)} />
-        <button style={styles.btn} onClick={handleLogin}>Login</button>
+        {isSignup
+          ? <button style={styles.btn} onClick={handleSignup}>Sign Up</button>
+          : <button style={styles.btn} onClick={handleLogin}>Login</button>
+        }
+        <p style={{ textAlign: 'center', marginTop: 12, fontSize: 13, color: '#666' }}>
+          {isSignup ? "Already have an account? " : "New user? "}
+          <span style={{ color: '#4f46e5', cursor: 'pointer' }}
+            onClick={() => setIsSignup(!isSignup)}>
+            {isSignup ? "Login" : "Sign Up"}
+          </span>
+        </p>
       </div>
     </div>
   );
