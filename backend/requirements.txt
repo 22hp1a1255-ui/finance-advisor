@@ -11,3 +11,4 @@ joblib
 shap
 matplotlib
 gunicorn
+flask-cors
