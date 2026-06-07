@@ -1,7 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 
-const API = "https://finance-advisor-backend-okeg.onrender.com";
+const API = "https://finance-advisor-backend-okeg.onrender.com/api/v1";
 
 function Login({ onLogin }) {
   const [phone, setPhone] = useState("");

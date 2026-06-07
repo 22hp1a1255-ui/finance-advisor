@@ -13,10 +13,7 @@ def create_app():
     db.init_app(app)
     jwt.init_app(app)
 
-    CORS(app, origins=[
-        "https://finance-advisor-nu.vercel.app",
-        "http://localhost:3000"
-    ])
+    CORS(app)
 
     from app.auth import auth_bp
     app.register_blueprint(auth_bp, url_prefix='/api/v1/auth')
