@@ -71,6 +71,7 @@ function Dashboard({ token }) {
   const [transactions, setTransactions] = useState([]);
   const [credit, setCredit] = useState(null);
   const [budget, setBudget] = useState(null);
+  const [loans, setLoans] = useState(null);
 
   const headers = { Authorization: `Bearer ${token}` };
 
@@ -104,6 +105,15 @@ function Dashboard({ token }) {
     setBudget(res.data);
   };
 
+  const loadLoans = async () => {
+  try {
+    const res = await axios.get(`${API}/loans/recommendations`, { headers });
+    setLoans(res.data);
+  } catch (e) {
+    alert(e.response?.data?.error || "Error fetching loan recommendations");
+  }
+  };
+
   return (
     <div style={styles.dashboard}>
       <h2>💰 AI Finance Advisor</h2>
@@ -131,6 +141,7 @@ function Dashboard({ token }) {
         <button style={styles.btn} onClick={loadTransactions}>Load Transactions</button>
         <button style={styles.btn} onClick={loadCredit}>Get Credit Score</button>
         <button style={styles.btn} onClick={loadBudget}>Get Budget Tips</button>
+        <button style={styles.btn} onClick={loadLoans}>Get Loan Recommendations</button>
       </div>
 
       {transactions.length > 0 && (
@@ -185,8 +196,76 @@ function Dashboard({ token }) {
           ))}
         </div>
       )}
+
+      {loans && (
+    <div style={styles.card}>
+      <h3>💰 Loan Recommendations</h3>
+      <div style={{ background: '#f0fdf4', borderRadius: 8, padding: 12, marginBottom: 16 }}>
+        <strong>Your Financial Summary</strong>
+        <div style={styles.row}>
+          <span>Monthly Income:</span>
+          <span>₹{loans.financial_summary.monthly_income}</span>
+        </div>
+        <div style={styles.row}>
+          <span>Monthly Expenses:</span>
+          <span>₹{loans.financial_summary.monthly_expenses}</span>
+        </div>
+        <div style={styles.row}>
+          <span>Savings Rate:</span>
+          <span>{loans.financial_summary.savings_rate}</span>
+        </div>
+        <div style={styles.row}>
+          <span>Debt-to-Income:</span>
+          <span>{loans.financial_summary.debt_to_income_ratio}</span>
+        </div>
+      </div>
+
+      <h4 style={{ color: 'green' }}>✅ Eligible Loans</h4>
+      {loans.recommended_loans.map(loan => (
+        <div key={loan.type} style={{
+          border: '1px solid #86efac',
+          borderRadius: 8,
+          padding: 12,
+          marginBottom: 8,
+          background: '#f0fdf4'
+        }}>
+          <div style={{ fontSize: 18, fontWeight: 500 }}>{loan.icon} {loan.type}</div>
+          <div style={{ fontSize: 13, color: '#555', marginBottom: 6 }}>{loan.description}</div>
+          <div style={styles.row}>
+            <span>Interest Rate:</span><span>{loan.interest_rate}</span>
+          </div>
+          <div style={styles.row}>
+            <span>Eligible Amount:</span>
+            <span style={{ fontWeight: 500, color: '#16a34a' }}>₹{loan.eligibility_amount.toLocaleString()}</span>
+          </div>
+          <div style={styles.row}>
+            <span>Sample EMI:</span><span>₹{loan.sample_emi.toLocaleString()}/month</span>
+          </div>
+        </div>
+      ))}
+
+      {loans.not_eligible.length > 0 && (
+        <>
+          <h4 style={{ color: '#dc2626' }}>❌ Not Eligible</h4>
+          {loans.not_eligible.map(loan => (
+            <div key={loan.type} style={{
+              border: '1px solid #fca5a5',
+              borderRadius: 8,
+              padding: 12,
+              marginBottom: 8,
+              background: '#fef2f2'
+            }}>
+              <div style={{ fontSize: 16, fontWeight: 500 }}>{loan.icon} {loan.type}</div>
+              <div style={{ fontSize: 12, color: '#dc2626' }}>Reason: {loan.reason}</div>
+            </div>
+          ))}
+        </>
+      )}
+    </div>
+    )}
     </div>
   );
+
 }
 
 const styles = {
