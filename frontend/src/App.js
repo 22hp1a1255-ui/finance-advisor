@@ -195,7 +195,7 @@ function Dashboard({ token }) {
         <button style={styles.btn} onClick={loadBudget}>Get Budget Tips</button>
         <button style={styles.btn} onClick={loadLoans}>Get Loan Recommendations</button>
         <button style={styles.btn} onClick={loadInsights}>Spending Insights</button>
-        <button style={styles.btn} onClick={loadGoals}>Savings Goals</button>
+        <button style={styles.btn} onClick={() => { loadGoals(); setShowGoalForm(true); }}>Savings Goals</button>
       </div>
 
       {transactions.length > 0 && (
@@ -431,7 +431,7 @@ function Dashboard({ token }) {
     </div>
   )}
 
-  {(goals.length > 0 || showGoalForm) && (
+  {(goals.length > 0 || showGoalForm || true) && (
     <div style={styles.card}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
         <h3 style={{ margin: 0 }}>🎯 Savings Goals</h3>
