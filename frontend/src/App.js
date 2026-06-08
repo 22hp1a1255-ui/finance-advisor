@@ -72,6 +72,7 @@ function Dashboard({ token }) {
   const [credit, setCredit] = useState(null);
   const [budget, setBudget] = useState(null);
   const [loans, setLoans] = useState(null);
+  const [insights, setInsights] = useState(null);
 
   const headers = { Authorization: `Bearer ${token}` };
 
@@ -114,6 +115,15 @@ function Dashboard({ token }) {
   }
   };
 
+  const loadInsights = async () => {
+  try {
+    const res = await axios.get(`${API}/insights/summary`, { headers });
+    setInsights(res.data);
+  } catch (e) {
+    alert(e.response?.data?.error || "Error fetching insights");
+  }
+  };
+
   return (
     <div style={styles.dashboard}>
       <h2>💰 AI Finance Advisor</h2>
@@ -142,6 +152,7 @@ function Dashboard({ token }) {
         <button style={styles.btn} onClick={loadCredit}>Get Credit Score</button>
         <button style={styles.btn} onClick={loadBudget}>Get Budget Tips</button>
         <button style={styles.btn} onClick={loadLoans}>Get Loan Recommendations</button>
+        <button style={styles.btn} onClick={loadInsights}>Spending Insights</button>
       </div>
 
       {transactions.length > 0 && (
@@ -263,6 +274,119 @@ function Dashboard({ token }) {
       )}
     </div>
     )}
+    {insights && (
+    <div style={styles.card}>
+      <h3>📊 Spending Insights</h3>
+
+      {/* Health Score */}
+      <div style={{
+        textAlign: 'center',
+        padding: 16,
+        background: '#f0fdf4',
+        borderRadius: 8,
+        marginBottom: 16
+      }}>
+        <div style={{ fontSize: 13, color: '#555' }}>Financial Health</div>
+        <div style={{
+          fontSize: 32,
+          fontWeight: 'bold',
+          color: insights.financial_health_color
+        }}>
+          {insights.financial_health}
+        </div>
+        <div style={{ fontSize: 13, color: '#555' }}>
+          Savings Rate: {insights.savings_rate}%
+        </div>
+      </div>
+
+      {/* Summary Row */}
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 8, marginBottom: 16 }}>
+        {[
+          { label: 'Total Income', value: `₹${insights.total_income.toLocaleString()}`, color: '#16a34a' },
+          { label: 'Total Expenses', value: `₹${insights.total_expenses.toLocaleString()}`, color: '#dc2626' },
+          { label: 'Total Savings', value: `₹${insights.total_savings.toLocaleString()}`, color: '#2563eb' }
+        ].map(item => (
+          <div key={item.label} style={{
+            background: '#f9f9f9',
+            borderRadius: 8,
+            padding: 12,
+            textAlign: 'center',
+            border: '1px solid #eee'
+          }}>
+            <div style={{ fontSize: 11, color: '#888' }}>{item.label}</div>
+            <div style={{ fontSize: 16, fontWeight: 'bold', color: item.color }}>
+              {item.value}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Alerts */}
+      {insights.alerts.length > 0 && (
+        <div style={{ marginBottom: 16 }}>
+          <h4>⚠️ Alerts</h4>
+          {insights.alerts.map((alert, i) => (
+            <div key={i} style={{
+              padding: '8px 12px',
+              borderRadius: 8,
+              marginBottom: 6,
+              background: alert.type === 'warning' ? '#fef9c3' : '#f0fdf4',
+              borderLeft: `4px solid ${alert.type === 'warning' ? '#ca8a04' : '#16a34a'}`,
+              fontSize: 13
+            }}>
+              {alert.message}
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Top Categories */}
+      <h4>Top Spending Categories</h4>
+      {insights.top_categories.map(item => {
+        const max = insights.top_categories[0].amount;
+        const pct = Math.round((item.amount / max) * 100);
+        return (
+          <div key={item.category} style={{ marginBottom: 10 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 13, marginBottom: 3 }}>
+              <span>{item.category}</span>
+              <span>₹{item.amount.toLocaleString()}</span>
+            </div>
+            <div style={{ background: '#e5e7eb', borderRadius: 4, height: 8 }}>
+              <div style={{
+                width: `${pct}%`,
+                background: '#4f46e5',
+                borderRadius: 4,
+                height: 8
+              }} />
+            </div>
+          </div>
+        );
+      })}
+
+      {/* Monthly Trend */}
+      {insights.monthly_trend.length > 0 && (
+        <>
+          <h4>Monthly Spending Trend</h4>
+          {insights.monthly_trend.map(item => (
+            <div key={item.month} style={styles.row}>
+              <span style={{ minWidth: 80, fontSize: 13 }}>{item.month}</span>
+              <div style={{ flex: 1, background: '#e5e7eb', borderRadius: 4, height: 8 }}>
+                <div style={{
+                  width: `${Math.round((item.amount / Math.max(...insights.monthly_trend.map(m => m.amount))) * 100)}%`,
+                  background: '#f59e0b',
+                  borderRadius: 4,
+                  height: 8
+                }} />
+              </div>
+              <span style={{ fontSize: 13, minWidth: 80, textAlign: 'right' }}>
+                ₹{item.amount.toLocaleString()}
+              </span>
+            </div>
+          ))}
+        </>
+      )}
+    </div>
+  )}
     </div>
   );
 

@@ -30,6 +30,9 @@ def create_app():
     from app.routes.loans import loans_bp
     app.register_blueprint(loans_bp, url_prefix='/api/v1/loans')
 
+    from app.routes.insights import insights_bp
+    app.register_blueprint(insights_bp, url_prefix='/api/v1/insights')
+
     @app.route('/init-db')
     def init_db():
         db.create_all()
