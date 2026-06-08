@@ -28,7 +28,7 @@ def create_app():
     app.register_blueprint(budget_bp, url_prefix='/api/v1/budget')
 
     from app.routes.loans import loans_bp
-    capp.register_blueprint(loans_bp, url_prefix='/api/v1/loans')
+    app.register_blueprint(loans_bp, url_prefix='/api/v1/loans')
 
     @app.route('/init-db')
     def init_db():
