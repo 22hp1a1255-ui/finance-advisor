@@ -33,6 +33,9 @@ def create_app():
     from app.routes.insights import insights_bp
     app.register_blueprint(insights_bp, url_prefix='/api/v1/insights')
 
+    from app.routes.goals import goals_bp
+    app.register_blueprint(goals_bp, url_prefix='/api/v1/goals')
+
     @app.route('/init-db')
     def init_db():
         db.create_all()

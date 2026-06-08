@@ -73,6 +73,12 @@ function Dashboard({ token }) {
   const [budget, setBudget] = useState(null);
   const [loans, setLoans] = useState(null);
   const [insights, setInsights] = useState(null);
+  const [goals, setGoals] = useState([]);
+  const [showGoalForm, setShowGoalForm] = useState(false);
+  const [goalName, setGoalName] = useState("");
+  const [goalAmount, setGoalAmount] = useState("");
+  const [goalDeadline, setGoalDeadline] = useState("");
+  const [depositAmounts, setDepositAmounts] = useState({});
 
   const headers = { Authorization: `Bearer ${token}` };
 
@@ -123,6 +129,42 @@ function Dashboard({ token }) {
     alert(e.response?.data?.error || "Error fetching insights");
   }
   };
+  
+  const loadGoals = async () => {
+  const res = await axios.get(`${API}/goals/`, { headers });
+  setGoals(res.data.goals);
+  };
+
+  const createGoal = async () => {
+    if (!goalName || !goalAmount || !goalDeadline) {
+      alert("Please fill all fields");
+      return;
+    }
+    await axios.post(`${API}/goals/`, {
+      goal_name: goalName,
+      target_amount: parseFloat(goalAmount),
+      deadline: goalDeadline
+    }, { headers });
+    setGoalName(""); setGoalAmount(""); setGoalDeadline("");
+    setShowGoalForm(false);
+    loadGoals();
+  };
+
+  const addDeposit = async (goalId) => {
+    const amount = depositAmounts[goalId];
+    if (!amount) { alert("Enter deposit amount"); return; }
+    await axios.post(`${API}/goals/${goalId}/deposit`,
+      { amount: parseFloat(amount) },
+      { headers }
+    );
+    setDepositAmounts({ ...depositAmounts, [goalId]: "" });
+    loadGoals();
+  };
+
+  const deleteGoal = async (goalId) => {
+    await axios.delete(`${API}/goals/${goalId}`, { headers });
+    loadGoals();
+  };
 
   return (
     <div style={styles.dashboard}>
@@ -153,6 +195,7 @@ function Dashboard({ token }) {
         <button style={styles.btn} onClick={loadBudget}>Get Budget Tips</button>
         <button style={styles.btn} onClick={loadLoans}>Get Loan Recommendations</button>
         <button style={styles.btn} onClick={loadInsights}>Spending Insights</button>
+        <button style={styles.btn} onClick={loadGoals}>Savings Goals</button>
       </div>
 
       {transactions.length > 0 && (
@@ -385,6 +428,114 @@ function Dashboard({ token }) {
           ))}
         </>
       )}
+    </div>
+  )}
+
+  {(goals.length > 0 || showGoalForm) && (
+    <div style={styles.card}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+        <h3 style={{ margin: 0 }}>🎯 Savings Goals</h3>
+        <button style={{ ...styles.btn, padding: '6px 14px', fontSize: 13 }}
+          onClick={() => setShowGoalForm(!showGoalForm)}>
+          {showGoalForm ? 'Cancel' : '+ New Goal'}
+        </button>
+      </div>
+
+      {showGoalForm && (
+        <div style={{ background: '#f9f9f9', borderRadius: 8, padding: 16, marginBottom: 16, border: '1px solid #eee' }}>
+          <h4 style={{ margin: '0 0 12px' }}>Create New Goal</h4>
+          <input style={styles.input} placeholder="Goal name (e.g. New Laptop)"
+            value={goalName} onChange={e => setGoalName(e.target.value)} />
+          <input style={styles.input} placeholder="Target amount (₹)"
+            value={goalAmount} onChange={e => setGoalAmount(e.target.value)} />
+          <input style={styles.input} type="date"
+            value={goalDeadline} onChange={e => setGoalDeadline(e.target.value)} />
+          <button style={styles.btn} onClick={createGoal}>Create Goal</button>
+        </div>
+      )}
+
+      {goals.map(goal => (
+        <div key={goal.id} style={{
+          border: `1px solid ${goal.is_completed ? '#86efac' : goal.on_track ? '#93c5fd' : '#fca5a5'}`,
+          borderRadius: 8,
+          padding: 16,
+          marginBottom: 12,
+          background: goal.is_completed ? '#f0fdf4' : '#fff'
+        }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
+            <span style={{ fontWeight: 500, fontSize: 16 }}>
+              {goal.is_completed ? '✅' : '🎯'} {goal.goal_name}
+            </span>
+            <button onClick={() => deleteGoal(goal.id)}
+              style={{ background: 'none', border: 'none', color: '#dc2626', cursor: 'pointer', fontSize: 18 }}>
+              ×
+            </button>
+          </div>
+
+          {/* Progress bar */}
+          <div style={{ marginBottom: 8 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 13, marginBottom: 4 }}>
+              <span>₹{goal.current_amount.toLocaleString()} saved</span>
+              <span>{goal.progress_pct}%</span>
+              <span>₹{goal.target_amount.toLocaleString()} goal</span>
+            </div>
+            <div style={{ background: '#e5e7eb', borderRadius: 8, height: 12 }}>
+              <div style={{
+                width: `${goal.progress_pct}%`,
+                background: goal.is_completed ? '#16a34a' : goal.on_track ? '#4f46e5' : '#ef4444',
+                borderRadius: 8,
+                height: 12,
+                transition: 'width 0.5s ease'
+              }} />
+            </div>
+          </div>
+
+          {/* Stats */}
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 8, marginBottom: 12 }}>
+            {[
+              { label: 'Deadline', value: goal.deadline },
+              { label: 'Months Left', value: goal.months_left },
+              { label: 'Need/Month', value: `₹${goal.required_monthly.toLocaleString()}` }
+            ].map(item => (
+              <div key={item.label} style={{ textAlign: 'center', background: '#f9f9f9', borderRadius: 6, padding: 8 }}>
+                <div style={{ fontSize: 11, color: '#888' }}>{item.label}</div>
+                <div style={{ fontSize: 14, fontWeight: 500 }}>{item.value}</div>
+              </div>
+            ))}
+          </div>
+
+          {/* On track status */}
+          <div style={{
+            fontSize: 12,
+            padding: '4px 10px',
+            borderRadius: 20,
+            display: 'inline-block',
+            marginBottom: 12,
+            background: goal.on_track ? '#dcfce7' : '#fee2e2',
+            color: goal.on_track ? '#16a34a' : '#dc2626'
+          }}>
+            {goal.is_completed ? '🎉 Goal Completed!'
+              : goal.on_track ? '✅ On Track — keep it up!'
+              : `⚠️ Behind — save ₹${goal.required_monthly.toLocaleString()}/month to reach goal`}
+          </div>
+
+          {/* Deposit */}
+          {!goal.is_completed && (
+            <div style={{ display: 'flex', gap: 8 }}>
+              <input
+                style={{ ...styles.input, marginBottom: 0, flex: 1 }}
+                placeholder="Add deposit (₹)"
+                value={depositAmounts[goal.id] || ""}
+                onChange={e => setDepositAmounts({ ...depositAmounts, [goal.id]: e.target.value })}
+              />
+              <button style={{ ...styles.btn, marginBottom: 0 }}
+                onClick={() => addDeposit(goal.id)}>
+                Add
+              </button>
+            </div>
+          )}
+        </div>
+      ))}
     </div>
   )}
     </div>

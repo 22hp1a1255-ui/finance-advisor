@@ -32,3 +32,14 @@ class CreditScore(db.Model):
     model_version = db.Column(db.String(20))
     drivers = db.Column(db.JSON)          # SHAP explanation — filled in Week 3
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+class SavingsGoal(db.Model):
+    __tablename__ = 'savings_goals'
+    id = db.Column(db.String, primary_key=True, default=lambda: str(uuid.uuid4()))
+    user_id = db.Column(db.String, db.ForeignKey('users.id'), nullable=False)
+    goal_name = db.Column(db.String(100), nullable=False)
+    target_amount = db.Column(db.Float, nullable=False)
+    current_amount = db.Column(db.Float, default=0)
+    deadline = db.Column(db.DateTime, nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    is_completed = db.Column(db.Boolean, default=False)
