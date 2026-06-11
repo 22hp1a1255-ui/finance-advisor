@@ -79,6 +79,9 @@ function Dashboard({ token, onLogout }) {
   const [goalAmount, setGoalAmount] = useState("");
   const [goalDeadline, setGoalDeadline] = useState("");
   const [depositAmounts, setDepositAmounts] = useState({});
+  const [txDate, setTxDate] = useState(new Date().toISOString().split('T')[0]);
+  const [filterMonth, setFilterMonth] = useState("");
+  const [filterYear, setFilterYear] = useState("");
 
   const headers = { Authorization: `Bearer ${token}` };
 
@@ -86,15 +89,20 @@ function Dashboard({ token, onLogout }) {
     if (!desc || !amount) { alert("Please fill both fields"); return; }
     await axios.post(`${API}/transactions/`, {
       description: desc,
-      amount: parseFloat(amount)
+      amount: parseFloat(amount),
+      date: txDate
     }, { headers });
     setDesc("");
     setAmount("");
     loadTransactions();
   };
 
-  const loadTransactions = async () => {
-    const res = await axios.get(`${API}/transactions/`, { headers });
+  const loadTransactions = async (month, year) => {
+    let url = `${API}/transactions/`;
+    if (month && year) {
+      url += `?month=${month}&year=${year}`;
+    }
+    const res = await axios.get(url, { headers });
     setTransactions(res.data);
   };
 
@@ -197,18 +205,64 @@ function Dashboard({ token, onLogout }) {
           value={amount}
           onChange={e => setAmount(e.target.value)}
         />
+        <div style={{ marginBottom: 10 }}>
+          <label style={{ fontSize: 13, color: '#555', marginBottom: 4, display: 'block' }}>
+            Transaction Date
+          </label>
+          <input
+            type="date"
+            style={styles.input}
+            value={txDate}
+            onChange={e => setTxDate(e.target.value)}
+          />
+        </div>
         <button style={styles.btn} onClick={addTransaction}>
           Add and Auto-Categorize
         </button>
       </div>
 
-      <div style={styles.row}>
-        <button style={styles.btn} onClick={loadTransactions}>Load Transactions</button>
-        <button style={styles.btn} onClick={loadCredit}>Get Credit Score</button>
-        <button style={styles.btn} onClick={loadBudget}>Get Budget Tips</button>
-        <button style={styles.btn} onClick={loadLoans}>Get Loan Recommendations</button>
-        <button style={styles.btn} onClick={loadInsights}>Spending Insights</button>
-        <button style={styles.btn} onClick={() => { loadGoals(); setShowGoalForm(true); }}>Savings Goals</button>
+      <div style={styles.card}>
+        <h3>Filter by Month</h3>
+        <div style={{ display: 'flex', gap: 8, marginBottom: 12, flexWrap: 'wrap' }}>
+          <select
+            style={{ ...styles.input, marginBottom: 0, width: 'auto' }}
+            value={filterMonth}
+            onChange={e => setFilterMonth(e.target.value)}
+          >
+            <option value="">All Months</option>
+            <option value="1">January</option>
+            <option value="2">February</option>
+            <option value="3">March</option>
+            <option value="4">April</option>
+            <option value="5">May</option>
+            <option value="6">June</option>
+            <option value="7">July</option>
+            <option value="8">August</option>
+            <option value="9">September</option>
+            <option value="10">October</option>
+            <option value="11">November</option>
+            <option value="12">December</option>
+          </select>
+          <select
+            style={{ ...styles.input, marginBottom: 0, width: 'auto' }}
+            value={filterYear}
+            onChange={e => setFilterYear(e.target.value)}
+          >
+            <option value="">All Years</option>
+            <option value="2025">2025</option>
+            <option value="2026">2026</option>
+            <option value="2027">2027</option>
+          </select>
+          <button style={styles.btn}
+            onClick={() => loadTransactions(filterMonth, filterYear)}>
+            Load Transactions
+          </button>
+          <button style={styles.btn} onClick={loadCredit}>Get Credit Score</button>
+          <button style={styles.btn} onClick={loadBudget}>Get Budget Tips</button>
+          <button style={styles.btn} onClick={loadLoans}>Get Loan Recommendations</button>
+          <button style={styles.btn} onClick={loadInsights}>Spending Insights</button>
+          <button style={styles.btn} onClick={() => { loadGoals(); setShowGoalForm(true); }}>Savings Goals</button>
+        </div>
       </div>
 
       {transactions.length > 0 && (
