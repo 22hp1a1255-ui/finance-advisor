@@ -65,7 +65,7 @@ function Login({ onLogin }) {
   );
 }
 
-function Dashboard({ token }) {
+function Dashboard({ token, onLogout }) {
   const [desc, setDesc] = useState("");
   const [amount, setAmount] = useState("");
   const [transactions, setTransactions] = useState([]);
@@ -168,7 +168,20 @@ function Dashboard({ token }) {
 
   return (
     <div style={styles.dashboard}>
-      <h2>💰 AI Finance Advisor</h2>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+      <h2 style={{ margin: 0 }}>💰 AI Finance Advisor</h2>
+      <button onClick={onLogout} style={{
+        background: 'none',
+        border: '1px solid #dc2626',
+        color: '#dc2626',
+        padding: '6px 16px',
+        borderRadius: 8,
+        cursor: 'pointer',
+        fontSize: 13
+      }}>
+        Logout
+      </button>
+    </div>
 
       <div style={styles.card}>
         <h3>Add Transaction</h3>
@@ -556,5 +569,8 @@ const styles = {
 
 export default function App() {
   const [token, setToken] = useState(null);
-  return token ? <Dashboard token={token} /> : <Login onLogin={setToken} />;
+  const handleLogout = () => setToken(null);
+  return token
+    ? <Dashboard token={token} onLogout={handleLogout} />
+    : <Login onLogin={setToken} />;
 }
