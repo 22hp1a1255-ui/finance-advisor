@@ -82,6 +82,12 @@ function Dashboard({ token, onLogout }) {
   const [txDate, setTxDate] = useState(new Date().toISOString().split('T')[0]);
   const [filterMonth, setFilterMonth] = useState("");
   const [filterYear, setFilterYear] = useState("");
+  const [comparison, setComparison] = useState(null);
+  const [cmpMonth1, setCmpMonth1] = useState("");
+  const [cmpYear1, setCmpYear1] = useState("2026");
+  const [cmpMonth2, setCmpMonth2] = useState("");
+  const [cmpYear2, setCmpYear2] = useState("2026");
+  const [showComparison, setShowComparison] = useState(false);
 
   const headers = { Authorization: `Bearer ${token}` };
 
@@ -141,6 +147,23 @@ function Dashboard({ token, onLogout }) {
   const loadGoals = async () => {
   const res = await axios.get(`${API}/goals/`, { headers });
   setGoals(res.data.goals);
+  };
+
+  const loadComparison = async () => {
+    if (!cmpMonth1 || !cmpMonth2) {
+      alert("Please select both months to compare");
+      return;
+    }
+    try {
+      const res = await axios.get(
+        `${API}/comparison/monthly?month1=${cmpMonth1}&year1=${cmpYear1}&month2=${cmpMonth2}&year2=${cmpYear2}`,
+        { headers }
+      );
+      setComparison(res.data);
+      setShowComparison(true);
+    } catch (e) {
+      alert(e.response?.data?.error || "Error loading comparison");
+    }
   };
 
   const createGoal = async () => {
@@ -262,6 +285,7 @@ function Dashboard({ token, onLogout }) {
           <button style={styles.btn} onClick={loadLoans}>Get Loan Recommendations</button>
           <button style={styles.btn} onClick={loadInsights}>Spending Insights</button>
           <button style={styles.btn} onClick={() => { loadGoals(); setShowGoalForm(true); }}>Savings Goals</button>
+          <button style={styles.btn} onClick={() => setShowComparison(!showComparison)}>Month Comparison</button>
         </div>
       </div>
 
@@ -603,6 +627,145 @@ function Dashboard({ token, onLogout }) {
           )}
         </div>
       ))}
+    </div>
+  )}
+
+  {showComparison && (
+    <div style={styles.card}>
+      <h3>📅 Month vs Month Comparison</h3>
+
+      {/* Month selectors */}
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 16 }}>
+        <div>
+          <label style={{ fontSize: 13, color: '#555', marginBottom: 4, display: 'block' }}>
+            Month 1
+          </label>
+          <select style={{ ...styles.input, marginBottom: 6 }}
+            value={cmpMonth1} onChange={e => setCmpMonth1(e.target.value)}>
+            <option value="">Select Month</option>
+            {['January','February','March','April','May','June',
+              'July','August','September','October','November','December'
+            ].map((m, i) => (
+              <option key={m} value={i + 1}>{m}</option>
+            ))}
+          </select>
+          <select style={{ ...styles.input, marginBottom: 0 }}
+            value={cmpYear1} onChange={e => setCmpYear1(e.target.value)}>
+            <option value="2025">2025</option>
+            <option value="2026">2026</option>
+            <option value="2027">2027</option>
+          </select>
+        </div>
+        <div>
+          <label style={{ fontSize: 13, color: '#555', marginBottom: 4, display: 'block' }}>
+            Month 2
+          </label>
+          <select style={{ ...styles.input, marginBottom: 6 }}
+            value={cmpMonth2} onChange={e => setCmpMonth2(e.target.value)}>
+            <option value="">Select Month</option>
+            {['January','February','March','April','May','June',
+              'July','August','September','October','November','December'
+            ].map((m, i) => (
+              <option key={m} value={i + 1}>{m}</option>
+            ))}
+          </select>
+          <select style={{ ...styles.input, marginBottom: 0 }}
+            value={cmpYear2} onChange={e => setCmpYear2(e.target.value)}>
+            <option value="2025">2025</option>
+            <option value="2026">2026</option>
+            <option value="2027">2027</option>
+          </select>
+        </div>
+      </div>
+
+      <button style={{ ...styles.btn, width: '100%', marginBottom: 16 }}
+        onClick={loadComparison}>
+        Compare Months
+      </button>
+
+      {comparison && (
+        <>
+          {/* Summary cards */}
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 8, marginBottom: 16 }}>
+            {[
+              {
+                label: 'Income',
+                v1: comparison.month1.total_income,
+                v2: comparison.month2.total_income,
+                change: comparison.changes.income_change
+              },
+              {
+                label: 'Expenses',
+                v1: comparison.month1.total_expenses,
+                v2: comparison.month2.total_expenses,
+                change: comparison.changes.expense_change
+              },
+              {
+                label: 'Savings',
+                v1: comparison.month1.total_savings,
+                v2: comparison.month2.total_savings,
+                change: comparison.changes.savings_change
+              }
+            ].map(item => (
+              <div key={item.label} style={{
+                background: '#f9f9f9',
+                borderRadius: 8,
+                padding: 12,
+                border: '1px solid #eee',
+                textAlign: 'center'
+              }}>
+                <div style={{ fontSize: 12, color: '#888', marginBottom: 4 }}>{item.label}</div>
+                <div style={{ fontSize: 12, color: '#555' }}>
+                  {comparison.month1_name}: <strong>₹{item.v1.toLocaleString()}</strong>
+                </div>
+                <div style={{ fontSize: 12, color: '#555' }}>
+                  {comparison.month2_name}: <strong>₹{item.v2.toLocaleString()}</strong>
+                </div>
+                <div style={{
+                  fontSize: 13,
+                  fontWeight: 500,
+                  marginTop: 4,
+                  color: item.change > 0 ? '#16a34a' : item.change < 0 ? '#dc2626' : '#555'
+                }}>
+                  {item.change > 0 ? '▲' : item.change < 0 ? '▼' : '–'} {Math.abs(item.change)}%
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Category breakdown */}
+          <h4>Category Changes</h4>
+          {comparison.category_comparison.map(cat => (
+            <div key={cat.category} style={{ marginBottom: 10 }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 13, marginBottom: 3 }}>
+                <span style={{ fontWeight: 500 }}>{cat.category}</span>
+                <span style={{ color: cat.trend === 'up' ? '#dc2626' : '#16a34a', fontWeight: 500 }}>
+                  {cat.trend === 'up' ? '▲' : '▼'} {Math.abs(cat.change_pct)}%
+                </span>
+              </div>
+              <div style={{ display: 'flex', gap: 8, fontSize: 12, color: '#666', marginBottom: 4 }}>
+                <span>{comparison.month1_name}: ₹{cat.month1_amount.toLocaleString()}</span>
+                <span>→</span>
+                <span>{comparison.month2_name}: ₹{cat.month2_amount.toLocaleString()}</span>
+              </div>
+              <div style={{ display: 'flex', gap: 4 }}>
+                <div style={{
+                  flex: cat.month1_amount,
+                  background: '#4f46e5',
+                  height: 6,
+                  borderRadius: 3
+                }} />
+                <div style={{
+                  flex: cat.month2_amount,
+                  background: cat.trend === 'up' ? '#ef4444' : '#16a34a',
+                  height: 6,
+                  borderRadius: 3
+                }} />
+              </div>
+            </div>
+          ))}
+        </>
+      )}
     </div>
   )}
     </div>

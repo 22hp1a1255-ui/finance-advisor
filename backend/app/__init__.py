@@ -36,6 +36,9 @@ def create_app():
     from app.routes.goals import goals_bp
     app.register_blueprint(goals_bp, url_prefix='/api/v1/goals')
 
+    from app.routes.comparison import comparison_bp
+    app.register_blueprint(comparison_bp, url_prefix='/api/v1/comparison')
+
     @app.route('/init-db')
     def init_db():
         db.create_all()
