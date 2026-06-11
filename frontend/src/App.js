@@ -88,6 +88,11 @@ function Dashboard({ token, onLogout }) {
   const [cmpMonth2, setCmpMonth2] = useState("");
   const [cmpYear2, setCmpYear2] = useState("2026");
   const [showComparison, setShowComparison] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [categoryFilter, setCategoryFilter] = useState("");
+  const [editingId, setEditingId] = useState(null);
+  const [editDesc, setEditDesc] = useState("");
+  const [editAmount, setEditAmount] = useState("");
 
   const headers = { Authorization: `Bearer ${token}` };
 
@@ -164,6 +169,30 @@ function Dashboard({ token, onLogout }) {
     } catch (e) {
       alert(e.response?.data?.error || "Error loading comparison");
     }
+  };
+
+  const editTransaction = async (id) => {
+    await axios.put(`${API}/transactions/${id}`, {
+      description: editDesc,
+      amount: parseFloat(editAmount)
+    }, { headers });
+    setEditingId(null);
+    loadTransactions(filterMonth, filterYear);
+  };
+
+  const deleteTransaction = async (id) => {
+    if (!window.confirm("Delete this transaction?")) return;
+    await axios.delete(`${API}/transactions/${id}`, { headers });
+    loadTransactions(filterMonth, filterYear);
+  };
+
+  const searchTransactions = async () => {
+    let url = `${API}/transactions/?`;
+    if (filterMonth && filterYear) url += `month=${filterMonth}&year=${filterYear}&`;
+    if (searchQuery) url += `search=${searchQuery}&`;
+    if (categoryFilter) url += `category=${categoryFilter}`;
+    const res = await axios.get(url, { headers });
+    setTransactions(res.data);
   };
 
   const createGoal = async () => {
@@ -291,12 +320,102 @@ function Dashboard({ token, onLogout }) {
 
       {transactions.length > 0 && (
         <div style={styles.card}>
-          <h3>Transactions</h3>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+            <h3 style={{ margin: 0 }}>Transactions ({transactions.length})</h3>
+          </div>
+
+          {/* Search and filter */}
+          <div style={{ display: 'flex', gap: 8, marginBottom: 12, flexWrap: 'wrap' }}>
+            <input
+              style={{ ...styles.input, marginBottom: 0, flex: 2 }}
+              placeholder="Search by description..."
+              value={searchQuery}
+              onChange={e => setSearchQuery(e.target.value)}
+              onKeyDown={e => e.key === 'Enter' && searchTransactions()}
+            />
+            <select
+              style={{ ...styles.input, marginBottom: 0, flex: 1 }}
+              value={categoryFilter}
+              onChange={e => setCategoryFilter(e.target.value)}
+            >
+              <option value="">All Categories</option>
+              {['Food','Transport','Entertainment','Utilities',
+                'Healthcare','Shopping','Finance','Education','Income'
+              ].map(c => <option key={c} value={c}>{c}</option>)}
+            </select>
+            <button style={styles.btn} onClick={searchTransactions}>Search</button>
+          </div>
+
+          {/* Transaction list */}
           {transactions.map(t => (
-            <div key={t.id} style={styles.row}>
-              <span>{t.description}</span>
-              <span style={styles.badge}>{t.category}</span>
-              <span>₹{t.amount}</span>
+            <div key={t.id} style={{
+              border: '1px solid #eee',
+              borderRadius: 8,
+              padding: 12,
+              marginBottom: 8
+            }}>
+              {editingId === t.id ? (
+                // Edit mode
+                <div>
+                  <input
+                    style={{ ...styles.input, marginBottom: 6 }}
+                    value={editDesc}
+                    onChange={e => setEditDesc(e.target.value)}
+                    placeholder="Description"
+                  />
+                  <input
+                    style={{ ...styles.input, marginBottom: 8 }}
+                    value={editAmount}
+                    onChange={e => setEditAmount(e.target.value)}
+                    placeholder="Amount"
+                  />
+                  <div style={{ display: 'flex', gap: 8 }}>
+                    <button style={styles.btn} onClick={() => editTransaction(t.id)}>
+                      Save
+                    </button>
+                    <button style={{ ...styles.btn, background: '#6b7280' }}
+                      onClick={() => setEditingId(null)}>
+                      Cancel
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                // View mode
+                <div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <div style={{ flex: 1 }}>
+                      <div style={{ fontWeight: 500, fontSize: 14 }}>{t.description}</div>
+                      <div style={{ fontSize: 12, color: '#888', marginTop: 2 }}>{t.date}</div>
+                    </div>
+                    <span style={styles.badge}>{t.category}</span>
+                    <span style={{ fontWeight: 500, marginLeft: 8 }}>₹{t.amount}</span>
+                    <div style={{ display: 'flex', gap: 6, marginLeft: 12 }}>
+                      <button onClick={() => {
+                        setEditingId(t.id);
+                        setEditDesc(t.description);
+                        setEditAmount(t.amount);
+                      }} style={{
+                        background: '#e0e7ff',
+                        border: 'none',
+                        borderRadius: 6,
+                        padding: '4px 10px',
+                        cursor: 'pointer',
+                        fontSize: 12,
+                        color: '#3730a3'
+                      }}>Edit</button>
+                      <button onClick={() => deleteTransaction(t.id)} style={{
+                        background: '#fee2e2',
+                        border: 'none',
+                        borderRadius: 6,
+                        padding: '4px 10px',
+                        cursor: 'pointer',
+                        fontSize: 12,
+                        color: '#dc2626'
+                      }}>Delete</button>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           ))}
         </div>

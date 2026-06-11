@@ -22,7 +22,6 @@ def add_transaction():
 
     category = categorize_transaction(description)
 
-    # Use provided date or default to now
     if date_str:
         try:
             timestamp = datetime.strptime(date_str, '%Y-%m-%d')
@@ -57,6 +56,8 @@ def get_transactions():
     user_id = get_jwt_identity()
     month = request.args.get('month')
     year = request.args.get('year')
+    search = request.args.get('search', '').strip()
+    category = request.args.get('category', '').strip()
 
     query = Transaction.query.filter_by(user_id=user_id)
 
@@ -65,6 +66,14 @@ def get_transactions():
             db.extract('month', Transaction.timestamp) == int(month),
             db.extract('year', Transaction.timestamp) == int(year)
         )
+
+    if search:
+        query = query.filter(
+            Transaction.raw_description.ilike(f'%{search}%')
+        )
+
+    if category:
+        query = query.filter(Transaction.category == category)
 
     transactions = query.order_by(Transaction.timestamp.desc()).all()
 
@@ -77,3 +86,56 @@ def get_transactions():
         "timestamp": t.timestamp.isoformat(),
         "date": t.timestamp.strftime('%d %b %Y')
     } for t in transactions]), 200
+
+@transactions_bp.route('/<transaction_id>', methods=['PUT'])
+@jwt_required()
+def edit_transaction(transaction_id):
+    user_id = get_jwt_identity()
+    transaction = Transaction.query.filter_by(
+        id=transaction_id, user_id=user_id
+    ).first()
+
+    if not transaction:
+        return jsonify({"error": "Transaction not found"}), 404
+
+    data = request.get_json(force=True, silent=True)
+
+    if 'description' in data:
+        transaction.raw_description = data['description']
+        transaction.category = categorize_transaction(data['description'])
+
+    if 'amount' in data:
+        transaction.amount = float(data['amount'])
+
+    if 'date' in data:
+        try:
+            transaction.timestamp = datetime.strptime(data['date'], '%Y-%m-%d')
+        except:
+            pass
+
+    db.session.commit()
+
+    return jsonify({
+        "message": "Transaction updated",
+        "id": transaction.id,
+        "description": transaction.raw_description,
+        "amount": transaction.amount,
+        "category": transaction.category,
+        "date": transaction.timestamp.strftime('%d %b %Y')
+    }), 200
+
+@transactions_bp.route('/<transaction_id>', methods=['DELETE'])
+@jwt_required()
+def delete_transaction(transaction_id):
+    user_id = get_jwt_identity()
+    transaction = Transaction.query.filter_by(
+        id=transaction_id, user_id=user_id
+    ).first()
+
+    if not transaction:
+        return jsonify({"error": "Transaction not found"}), 404
+
+    db.session.delete(transaction)
+    db.session.commit()
+
+    return jsonify({"message": "Transaction deleted"}), 200
