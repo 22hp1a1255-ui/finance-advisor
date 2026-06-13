@@ -4,30 +4,30 @@ import axios from "axios";
 const API = "https://finance-advisor-backend-okeg.onrender.com/api/v1";
 
 const COLORS = {
-  bg: "#050724",
-  sidebar: "#0C0F1D",
-  card: "#1A2846",
-  accent: "#42688C",
-  light: "#E2F4DF",
-  text: "#E2F4DF",
-  muted: "#7a9bb5",
+  bg: "#F2F2EB",
+  sidebar: "#202E44",
+  card: "#ffffff",
+  accent: "#8B734C",
+  light: "#202E44",
+  text: "#202E44",
+  muted: "#A9BBC8",
   danger: "#ef4444",
-  success: "#22c55e",
-  warning: "#f59e0b"
+  success: "#2d7a4f",
+  warning: "#8B734C"
 };
 
 const S = {
   app: {
     display: "flex",
     minHeight: "100vh",
-    background: `linear-gradient(135deg, #050724, #0C0F1D, #1A2846)`,
+    background: "#F2F2EB",
     fontFamily: "'Inter', sans-serif",
     color: COLORS.text
   },
   sidebar: {
     width: 240,
-    background: COLORS.sidebar,
-    borderRight: `1px solid ${COLORS.accent}33`,
+    background: "#202E44",
+    borderRight: `1px solid #A9BBC844`,
     display: "flex",
     flexDirection: "column",
     padding: "24px 0",
@@ -37,31 +37,31 @@ const S = {
   },
   profile: {
     padding: "0 20px 24px",
-    borderBottom: `1px solid ${COLORS.accent}33`,
+    borderBottom: `1px solid #A9BBC833`,
     marginBottom: 8
   },
   avatar: {
     width: 44,
     height: 44,
     borderRadius: "50%",
-    background: `linear-gradient(135deg, ${COLORS.accent}, #1A2846)`,
+    background: `linear-gradient(135deg, #8B734C, #202E44)`,
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
     fontSize: 18,
     fontWeight: 700,
     marginBottom: 10,
-    color: COLORS.light
+    color: "#F2F2EB"
   },
   profileName: {
     fontSize: 15,
     fontWeight: 600,
-    color: COLORS.light,
+    color: "#F2F2EB",
     marginBottom: 2
   },
   profileSub: {
     fontSize: 11,
-    color: COLORS.muted
+    color: "#A9BBC8"
   },
   navItem: (active) => ({
     display: "flex",
@@ -71,9 +71,9 @@ const S = {
     cursor: "pointer",
     fontSize: 13,
     fontWeight: active ? 600 : 400,
-    color: active ? COLORS.light : COLORS.muted,
-    background: active ? `${COLORS.accent}33` : "none",
-    borderLeft: active ? `3px solid ${COLORS.accent}` : "3px solid transparent",
+    color: active ? "#F2F2EB" : "#A9BBC8",
+    background: active ? "#8B734C33" : "none",
+    borderLeft: active ? `3px solid #8B734C` : "3px solid transparent",
     transition: "all 0.2s"
   }),
   navIcon: { fontSize: 16, minWidth: 20 },
@@ -86,26 +86,26 @@ const S = {
   pageTitle: {
     fontSize: 22,
     fontWeight: 700,
-    color: COLORS.light,
+    color: "#202E44",
     marginBottom: 4
   },
   pageSubtitle: {
     fontSize: 13,
-    color: COLORS.muted,
+    color: "#A9BBC8",
     marginBottom: 28
   },
   card: {
-    background: `${COLORS.card}cc`,
-    border: `1px solid ${COLORS.accent}44`,
+    background: "#ffffff",
+    border: `1px solid #C7BCAB55`,
     borderRadius: 14,
     padding: "20px 24px",
     marginBottom: 16,
-    backdropFilter: "blur(8px)"
+    boxShadow: "0 2px 12px #202E4411"
   },
   cardTitle: {
     fontSize: 15,
     fontWeight: 600,
-    color: COLORS.light,
+    color: "#202E44",
     marginBottom: 16,
     display: "flex",
     alignItems: "center",
@@ -117,16 +117,16 @@ const S = {
     padding: "10px 14px",
     marginBottom: 10,
     borderRadius: 8,
-    border: `1px solid ${COLORS.accent}55`,
-    background: `${COLORS.bg}99`,
-    color: COLORS.light,
+    border: `1px solid #C7BCAB`,
+    background: "#F2F2EB",
+    color: "#202E44",
     fontSize: 13,
     outline: "none",
     boxSizing: "border-box"
   },
   btn: {
-    background: `linear-gradient(135deg, ${COLORS.accent}, #1A2846)`,
-    color: COLORS.light,
+    background: `linear-gradient(135deg, #8B734C, #202E44)`,
+    color: "#F2F2EB",
     border: "none",
     padding: "10px 20px",
     borderRadius: 8,
@@ -138,34 +138,34 @@ const S = {
     transition: "opacity 0.2s"
   },
   btnDanger: {
-    background: "#dc262622",
-    color: COLORS.danger,
-    border: `1px solid ${COLORS.danger}44`,
+    background: "#ef444422",
+    color: "#ef4444",
+    border: `1px solid #ef444444`,
     padding: "6px 12px",
     borderRadius: 6,
     cursor: "pointer",
     fontSize: 12
   },
   btnEdit: {
-    background: `${COLORS.accent}22`,
-    color: COLORS.accent,
-    border: `1px solid ${COLORS.accent}44`,
+    background: "#8B734C22",
+    color: "#8B734C",
+    border: `1px solid #8B734C44`,
     padding: "6px 12px",
     borderRadius: 6,
     cursor: "pointer",
     fontSize: 12
   },
   badge: {
-    background: `${COLORS.accent}33`,
-    color: COLORS.light,
+    background: "#A9BBC833",
+    color: "#202E44",
     padding: "3px 10px",
     borderRadius: 20,
     fontSize: 11,
     fontWeight: 500
   },
   statCard: {
-    background: `${COLORS.bg}88`,
-    border: `1px solid ${COLORS.accent}33`,
+    background: "#F2F2EB",
+    border: `1px solid #C7BCAB55`,
     borderRadius: 10,
     padding: "14px 16px",
     textAlign: "center"
@@ -173,27 +173,13 @@ const S = {
   statValue: {
     fontSize: 20,
     fontWeight: 700,
-    color: COLORS.light,
+    color: "#202E44",
     marginBottom: 2
   },
   statLabel: {
     fontSize: 11,
-    color: COLORS.muted
+    color: "#A9BBC8"
   },
-  progressBar: (pct, color) => ({
-    height: 8,
-    borderRadius: 4,
-    background: `${COLORS.accent}33`,
-    overflow: "hidden",
-    position: "relative"
-  }),
-  progressFill: (pct, color) => ({
-    height: "100%",
-    width: `${Math.min(pct, 100)}%`,
-    background: color || COLORS.accent,
-    borderRadius: 4,
-    transition: "width 0.6s ease"
-  }),
   row: {
     display: "flex",
     gap: 12,
@@ -203,9 +189,9 @@ const S = {
   },
   logoutBtn: {
     margin: "auto 20px 20px",
-    background: "#dc262622",
-    color: COLORS.danger,
-    border: `1px solid ${COLORS.danger}33`,
+    background: "#ef444422",
+    color: "#ef4444",
+    border: `1px solid #ef444433`,
     padding: "10px 16px",
     borderRadius: 8,
     cursor: "pointer",
@@ -242,24 +228,24 @@ function Login({ onLogin }) {
   return (
     <div style={{
       minHeight: "100vh",
-      background: `linear-gradient(135deg, #050724 0%, #0C0F1D 40%, #1A2846 70%, #42688C 100%)`,
+      background: `linear-gradient(135deg, #202E44 0%, #A9BBC8 60%, #F2F2EB 100%)`,
       display: "flex",
       alignItems: "center",
       justifyContent: "center",
       fontFamily: "'Inter', sans-serif"
     }}>
       <div style={{
-        background: `${COLORS.card}dd`,
-        border: `1px solid ${COLORS.accent}55`,
+        background: "#ffffff",
+        border: `1px solid #C7BCAB`,
         borderRadius: 20,
         padding: "40px 36px",
         width: 360,
-        backdropFilter: "blur(12px)"
+        boxShadow: "0 8px 32px #202E4422"
       }}>
         <div style={{ textAlign: "center", marginBottom: 32 }}>
           <div style={{ fontSize: 40, marginBottom: 8 }}>💰</div>
-          <div style={{ fontSize: 22, fontWeight: 700, color: COLORS.light }}>Finance Advisor</div>
-          <div style={{ fontSize: 13, color: COLORS.muted, marginTop: 4 }}>
+          <div style={{ fontSize: 22, fontWeight: 700, color: "#202E44" }}>Finance Advisor</div>
+          <div style={{ fontSize: 13, color: "#A9BBC8", marginTop: 4 }}>
             AI-powered personal finance
           </div>
         </div>
@@ -276,9 +262,9 @@ function Login({ onLogin }) {
           {isSignup ? "Create Account" : "Sign In"}
         </button>
 
-        <p style={{ textAlign: "center", marginTop: 16, fontSize: 13, color: COLORS.muted }}>
+        <p style={{ textAlign: "center", marginTop: 16, fontSize: 13, color: "#A9BBC8" }}>
           {isSignup ? "Already have an account? " : "New here? "}
-          <span style={{ color: COLORS.accent, cursor: "pointer", fontWeight: 500 }}
+          <span style={{ color: "#8B734C", cursor: "pointer", fontWeight: 500 }}
             onClick={() => setIsSignup(!isSignup)}>
             {isSignup ? "Sign In" : "Sign Up"}
           </span>
@@ -473,14 +459,12 @@ function Dashboard({ token, userName, onLogout }) {
     <div style={S.app}>
       {/* Sidebar */}
       <div style={S.sidebar}>
-        {/* Profile */}
         <div style={S.profile}>
           <div style={S.avatar}>{(userName || "U")[0].toUpperCase()}</div>
           <div style={S.profileName}>{userName || "User"}</div>
           <div style={S.profileSub}>Personal Finance</div>
         </div>
 
-        {/* Nav */}
         {navItems.map(item => (
           <div key={item.id} style={S.navItem(activePage === item.id)}
             onClick={() => {
@@ -497,7 +481,6 @@ function Dashboard({ token, userName, onLogout }) {
           </div>
         ))}
 
-        {/* Logout */}
         <div style={{ marginTop: "auto", padding: "0 20px 20px" }}>
           <button style={S.logoutBtn} onClick={onLogout}>Sign Out</button>
         </div>
@@ -521,10 +504,10 @@ function Dashboard({ token, userName, onLogout }) {
               <input type="date" style={S.input}
                 value={txDate} onChange={e => setTxDate(e.target.value)} />
 
-              <div style={{ border: `2px dashed ${COLORS.accent}55`, borderRadius: 8, padding: 12, marginBottom: 10, textAlign: "center" }}>
-                <div style={{ fontSize: 12, color: COLORS.muted, marginBottom: 6 }}>📷 Scan bill/receipt image</div>
-                <input type="file" accept="image/*" onChange={handleImageOCR} style={{ fontSize: 12, color: COLORS.muted }} />
-                {ocrLoading && <div style={{ marginTop: 6, color: COLORS.accent, fontSize: 12 }}>🔍 Reading your bill...</div>}
+              <div style={{ border: `2px dashed #C7BCAB`, borderRadius: 8, padding: 12, marginBottom: 10, textAlign: "center", background: "#F2F2EB" }}>
+                <div style={{ fontSize: 12, color: "#A9BBC8", marginBottom: 6 }}>📷 Scan bill/receipt image</div>
+                <input type="file" accept="image/*" onChange={handleImageOCR} style={{ fontSize: 12, color: "#A9BBC8" }} />
+                {ocrLoading && <div style={{ marginTop: 6, color: "#8B734C", fontSize: 12 }}>🔍 Reading your bill...</div>}
                 {ocrResult && <div style={{ marginTop: 6, color: COLORS.success, fontSize: 12 }}>✅ Found: {ocrResult.description} — ₹{ocrResult.amount}</div>}
               </div>
 
@@ -564,7 +547,7 @@ function Dashboard({ token, userName, onLogout }) {
               <div style={S.card}>
                 <div style={S.cardTitle}>📋 {transactions.length} Transactions</div>
                 {transactions.map(t => (
-                  <div key={t.id} style={{ border: `1px solid ${COLORS.accent}33`, borderRadius: 8, padding: 12, marginBottom: 8 }}>
+                  <div key={t.id} style={{ border: `1px solid #C7BCAB55`, borderRadius: 8, padding: 12, marginBottom: 8 }}>
                     {editingId === t.id ? (
                       <div>
                         <input style={S.input} value={editDesc} onChange={e => setEditDesc(e.target.value)} placeholder="Description" />
@@ -575,11 +558,11 @@ function Dashboard({ token, userName, onLogout }) {
                     ) : (
                       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 8 }}>
                         <div style={{ flex: 1 }}>
-                          <div style={{ fontSize: 14, fontWeight: 500, color: COLORS.light }}>{t.description}</div>
-                          <div style={{ fontSize: 11, color: COLORS.muted }}>{t.date}</div>
+                          <div style={{ fontSize: 14, fontWeight: 500, color: "#202E44" }}>{t.description}</div>
+                          <div style={{ fontSize: 11, color: "#A9BBC8" }}>{t.date}</div>
                         </div>
                         <span style={S.badge}>{t.category}</span>
-                        <span style={{ fontWeight: 600, color: t.category === 'Income' ? COLORS.success : COLORS.light }}>
+                        <span style={{ fontWeight: 600, color: t.category === 'Income' ? COLORS.success : "#202E44" }}>
                           {t.category === 'Income' ? '+' : '-'}₹{t.amount}
                         </span>
                         <button style={S.btnEdit} onClick={() => { setEditingId(t.id); setEditDesc(t.description); setEditAmount(t.amount); }}>Edit</button>
@@ -604,13 +587,13 @@ function Dashboard({ token, userName, onLogout }) {
                   <div style={{ fontSize: 80, fontWeight: 800, color: credit.credit_score >= 70 ? COLORS.success : credit.credit_score >= 50 ? COLORS.warning : COLORS.danger }}>
                     {credit.credit_score}
                   </div>
-                  <div style={{ fontSize: 16, color: COLORS.muted }}>out of 100</div>
-                  <div style={{ marginTop: 8, fontSize: 13, color: COLORS.light }}>{credit.explanation}</div>
+                  <div style={{ fontSize: 16, color: "#A9BBC8" }}>out of 100</div>
+                  <div style={{ marginTop: 8, fontSize: 13, color: "#202E44" }}>{credit.explanation}</div>
                 </div>
                 <div style={S.cardTitle}>Top Score Drivers</div>
                 {Object.entries(credit.top_drivers).map(([k, v]) => (
                   <div key={k} style={{ ...S.row, marginBottom: 8 }}>
-                    <span style={{ flex: 1, fontSize: 13, color: COLORS.muted }}>{k.replace(/_/g, ' ')}</span>
+                    <span style={{ flex: 1, fontSize: 13, color: "#A9BBC8" }}>{k.replace(/_/g, ' ')}</span>
                     <span style={{ fontWeight: 600, color: v > 0 ? COLORS.success : COLORS.danger }}>
                       {v > 0 ? '+' : ''}{v}
                     </span>
@@ -619,7 +602,7 @@ function Dashboard({ token, userName, onLogout }) {
               </div>
             ) : (
               <div style={S.card}>
-                <div style={{ textAlign: "center", padding: 32, color: COLORS.muted }}>
+                <div style={{ textAlign: "center", padding: 32, color: "#A9BBC8" }}>
                   Add at least 3 transactions then click below
                 </div>
                 <button style={{ ...S.btn, width: "100%" }} onClick={loadCredit}>Generate Credit Score</button>
@@ -638,16 +621,18 @@ function Dashboard({ token, userName, onLogout }) {
                 {budget.recommendations.map(r => (
                   <div key={r.category} style={{ marginBottom: 16 }}>
                     <div style={{ display: "flex", justifyContent: "space-between", fontSize: 13, marginBottom: 4 }}>
-                      <span style={{ color: COLORS.light, fontWeight: 500 }}>{r.category}</span>
+                      <span style={{ color: "#202E44", fontWeight: 500 }}>{r.category}</span>
                       <span style={{ color: r.status === "good" ? COLORS.success : COLORS.danger }}>
                         {r.status === "good" ? "✅" : "⚠️"} ₹{r.actual_spend} / ₹{r.recommended_limit}
                       </span>
                     </div>
-                    <div style={S.progressBar()}>
-                      <div style={S.progressFill(
-                        r.recommended_limit > 0 ? (r.actual_spend / r.recommended_limit) * 100 : 0,
-                        r.status === "good" ? COLORS.success : COLORS.danger
-                      )} />
+                    <div style={{ height: 8, borderRadius: 4, background: "#F2F2EB", overflow: "hidden" }}>
+                      <div style={{
+                        height: "100%",
+                        width: `${Math.min(r.recommended_limit > 0 ? (r.actual_spend / r.recommended_limit) * 100 : 0, 100)}%`,
+                        background: r.status === "good" ? COLORS.success : COLORS.danger,
+                        borderRadius: 4
+                      }} />
                     </div>
                   </div>
                 ))}
@@ -684,21 +669,32 @@ function Dashboard({ token, userName, onLogout }) {
                   {loans.recommended_loans.map(loan => (
                     <div key={loan.type} style={{ border: `1px solid ${COLORS.success}44`, borderRadius: 8, padding: 12, marginBottom: 10, background: `${COLORS.success}11` }}>
                       <div style={{ fontSize: 16, fontWeight: 600, marginBottom: 4 }}>{loan.icon} {loan.type}</div>
-                      <div style={{ fontSize: 12, color: COLORS.muted, marginBottom: 8 }}>{loan.description}</div>
+                      <div style={{ fontSize: 12, color: "#A9BBC8", marginBottom: 8 }}>{loan.description}</div>
                       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8 }}>
                         {[
                           { label: "Rate", value: loan.interest_rate },
                           { label: "Eligible", value: `₹${loan.eligibility_amount.toLocaleString()}` },
                           { label: "EMI/mo", value: `₹${loan.sample_emi.toLocaleString()}` }
                         ].map(s => (
-                          <div key={s.label} style={{ textAlign: "center", background: `${COLORS.bg}88`, borderRadius: 6, padding: 8 }}>
-                            <div style={{ fontSize: 13, fontWeight: 600, color: COLORS.light }}>{s.value}</div>
-                            <div style={{ fontSize: 11, color: COLORS.muted }}>{s.label}</div>
+                          <div key={s.label} style={{ textAlign: "center", background: "#F2F2EB", borderRadius: 6, padding: 8 }}>
+                            <div style={{ fontSize: 13, fontWeight: 600, color: "#202E44" }}>{s.value}</div>
+                            <div style={{ fontSize: 11, color: "#A9BBC8" }}>{s.label}</div>
                           </div>
                         ))}
                       </div>
                     </div>
                   ))}
+                  {loans.not_eligible.length > 0 && (
+                    <>
+                      <div style={{ ...S.cardTitle, marginTop: 16 }}>❌ Not Eligible</div>
+                      {loans.not_eligible.map(loan => (
+                        <div key={loan.type} style={{ border: `1px solid ${COLORS.danger}44`, borderRadius: 8, padding: 12, marginBottom: 8, background: `${COLORS.danger}11` }}>
+                          <div style={{ fontSize: 15, fontWeight: 500 }}>{loan.icon} {loan.type}</div>
+                          <div style={{ fontSize: 12, color: COLORS.danger, marginTop: 4 }}>{loan.reason}</div>
+                        </div>
+                      ))}
+                    </>
+                  )}
                 </div>
               </>
             ) : (
@@ -720,8 +716,8 @@ function Dashboard({ token, userName, onLogout }) {
                   {[
                     { label: "Income", value: `₹${insights.total_income.toLocaleString()}`, color: COLORS.success },
                     { label: "Expenses", value: `₹${insights.total_expenses.toLocaleString()}`, color: COLORS.danger },
-                    { label: "Savings", value: `₹${insights.total_savings.toLocaleString()}`, color: COLORS.accent },
-                    { label: "Health", value: insights.financial_health, color: COLORS.warning }
+                    { label: "Savings", value: `₹${insights.total_savings.toLocaleString()}`, color: "#8B734C" },
+                    { label: "Health", value: insights.financial_health, color: "#202E44" }
                   ].map(s => (
                     <div key={s.label} style={S.statCard}>
                       <div style={{ ...S.statValue, color: s.color }}>{s.value}</div>
@@ -734,7 +730,7 @@ function Dashboard({ token, userName, onLogout }) {
                   <div style={S.card}>
                     <div style={S.cardTitle}>⚠️ Alerts</div>
                     {insights.alerts.map((a, i) => (
-                      <div key={i} style={{ padding: "8px 12px", borderRadius: 6, marginBottom: 6, background: a.type === 'warning' ? "#f59e0b22" : `${COLORS.success}22`, borderLeft: `3px solid ${a.type === 'warning' ? COLORS.warning : COLORS.success}`, fontSize: 13 }}>
+                      <div key={i} style={{ padding: "8px 12px", borderRadius: 6, marginBottom: 6, background: a.type === 'warning' ? "#f59e0b22" : `${COLORS.success}22`, borderLeft: `3px solid ${a.type === 'warning' ? COLORS.warning : COLORS.success}`, fontSize: 13, color: "#202E44" }}>
                         {a.message}
                       </div>
                     ))}
@@ -748,16 +744,34 @@ function Dashboard({ token, userName, onLogout }) {
                     return (
                       <div key={item.category} style={{ marginBottom: 12 }}>
                         <div style={{ display: "flex", justifyContent: "space-between", fontSize: 13, marginBottom: 4 }}>
-                          <span>{item.category}</span>
-                          <span>₹{item.amount.toLocaleString()}</span>
+                          <span style={{ color: "#202E44" }}>{item.category}</span>
+                          <span style={{ color: "#A9BBC8" }}>₹{item.amount.toLocaleString()}</span>
                         </div>
-                        <div style={S.progressBar()}>
-                          <div style={S.progressFill((item.amount / max) * 100)} />
+                        <div style={{ height: 8, borderRadius: 4, background: "#F2F2EB", overflow: "hidden" }}>
+                          <div style={{ height: "100%", width: `${(item.amount / max) * 100}%`, background: "#8B734C", borderRadius: 4 }} />
                         </div>
                       </div>
                     );
                   })}
                 </div>
+
+                {insights.monthly_trend.length > 0 && (
+                  <div style={S.card}>
+                    <div style={S.cardTitle}>Monthly Trend</div>
+                    {insights.monthly_trend.map(item => {
+                      const max = Math.max(...insights.monthly_trend.map(m => m.amount));
+                      return (
+                        <div key={item.month} style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 10 }}>
+                          <span style={{ fontSize: 12, color: "#A9BBC8", minWidth: 70 }}>{item.month}</span>
+                          <div style={{ flex: 1, height: 8, borderRadius: 4, background: "#F2F2EB", overflow: "hidden" }}>
+                            <div style={{ height: "100%", width: `${(item.amount / max) * 100}%`, background: "#A9BBC8", borderRadius: 4 }} />
+                          </div>
+                          <span style={{ fontSize: 12, color: "#202E44", minWidth: 80, textAlign: "right" }}>₹{item.amount.toLocaleString()}</span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
               </>
             ) : (
               <div style={S.card}>
@@ -780,9 +794,8 @@ function Dashboard({ token, userName, onLogout }) {
                   {showGoalForm ? "Cancel" : "+ New Goal"}
                 </button>
               </div>
-
               {showGoalForm && (
-                <div style={{ borderTop: `1px solid ${COLORS.accent}33`, paddingTop: 16 }}>
+                <div style={{ borderTop: `1px solid #C7BCAB33`, paddingTop: 16 }}>
                   <input style={S.input} placeholder="Goal name (e.g. New Laptop)"
                     value={goalName} onChange={e => setGoalName(e.target.value)} />
                   <input style={S.input} placeholder="Target amount (₹)"
@@ -794,21 +807,33 @@ function Dashboard({ token, userName, onLogout }) {
               )}
             </div>
 
+            {goals.length === 0 && !showGoalForm && (
+              <div style={{ ...S.card, textAlign: "center", padding: 40, color: "#A9BBC8" }}>
+                No goals yet. Click "+ New Goal" to get started!
+              </div>
+            )}
+
             {goals.map(goal => (
-              <div key={goal.id} style={{ ...S.card, border: `1px solid ${goal.is_completed ? COLORS.success : goal.on_track ? COLORS.accent : COLORS.danger}55` }}>
+              <div key={goal.id} style={{ ...S.card, border: `1px solid ${goal.is_completed ? COLORS.success : goal.on_track ? "#8B734C" : COLORS.danger}55` }}>
                 <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 12 }}>
-                  <span style={{ fontWeight: 600, fontSize: 16 }}>{goal.is_completed ? '✅' : '🎯'} {goal.goal_name}</span>
+                  <span style={{ fontWeight: 600, fontSize: 16, color: "#202E44" }}>{goal.is_completed ? '✅' : '🎯'} {goal.goal_name}</span>
                   <button style={S.btnDanger} onClick={() => deleteGoal(goal.id)}>×</button>
                 </div>
 
                 <div style={{ marginBottom: 12 }}>
                   <div style={{ display: "flex", justifyContent: "space-between", fontSize: 13, marginBottom: 4 }}>
-                    <span style={{ color: COLORS.muted }}>₹{goal.current_amount.toLocaleString()} saved</span>
-                    <span style={{ fontWeight: 600 }}>{goal.progress_pct}%</span>
-                    <span style={{ color: COLORS.muted }}>₹{goal.target_amount.toLocaleString()} goal</span>
+                    <span style={{ color: "#A9BBC8" }}>₹{goal.current_amount.toLocaleString()} saved</span>
+                    <span style={{ fontWeight: 600, color: "#202E44" }}>{goal.progress_pct}%</span>
+                    <span style={{ color: "#A9BBC8" }}>₹{goal.target_amount.toLocaleString()} goal</span>
                   </div>
-                  <div style={S.progressBar()}>
-                    <div style={S.progressFill(goal.progress_pct, goal.is_completed ? COLORS.success : goal.on_track ? COLORS.accent : COLORS.danger)} />
+                  <div style={{ height: 10, borderRadius: 5, background: "#F2F2EB", overflow: "hidden" }}>
+                    <div style={{
+                      height: "100%",
+                      width: `${goal.progress_pct}%`,
+                      background: goal.is_completed ? COLORS.success : goal.on_track ? "#8B734C" : COLORS.danger,
+                      borderRadius: 5,
+                      transition: "width 0.6s ease"
+                    }} />
                   </div>
                 </div>
 
@@ -818,15 +843,15 @@ function Dashboard({ token, userName, onLogout }) {
                     { label: "Months Left", value: goal.months_left },
                     { label: "Need/Month", value: `₹${goal.required_monthly.toLocaleString()}` }
                   ].map(s => (
-                    <div key={s.label} style={{ textAlign: "center", background: `${COLORS.bg}88`, borderRadius: 6, padding: 8 }}>
-                      <div style={{ fontSize: 13, fontWeight: 500 }}>{s.value}</div>
-                      <div style={{ fontSize: 11, color: COLORS.muted }}>{s.label}</div>
+                    <div key={s.label} style={{ textAlign: "center", background: "#F2F2EB", borderRadius: 6, padding: 8 }}>
+                      <div style={{ fontSize: 13, fontWeight: 500, color: "#202E44" }}>{s.value}</div>
+                      <div style={{ fontSize: 11, color: "#A9BBC8" }}>{s.label}</div>
                     </div>
                   ))}
                 </div>
 
-                <div style={{ fontSize: 12, display: "inline-block", padding: "4px 10px", borderRadius: 20, marginBottom: 12, background: goal.on_track ? `${COLORS.success}22` : `${COLORS.danger}22`, color: goal.on_track ? COLORS.success : COLORS.danger }}>
-                  {goal.is_completed ? '🎉 Goal Completed!' : goal.on_track ? '✅ On Track!' : `⚠️ Behind — save ₹${goal.required_monthly.toLocaleString()}/month`}
+                <div style={{ fontSize: 12, display: "inline-block", padding: "4px 12px", borderRadius: 20, marginBottom: 12, background: goal.on_track ? `${COLORS.success}22` : `${COLORS.danger}22`, color: goal.on_track ? COLORS.success : COLORS.danger }}>
+                  {goal.is_completed ? '🎉 Goal Completed!' : goal.on_track ? '✅ On Track!' : `⚠️ Save ₹${goal.required_monthly.toLocaleString()}/month to reach goal`}
                 </div>
 
                 {!goal.is_completed && (
@@ -840,12 +865,6 @@ function Dashboard({ token, userName, onLogout }) {
                 )}
               </div>
             ))}
-
-            {goals.length === 0 && !showGoalForm && (
-              <div style={{ ...S.card, textAlign: "center", padding: 40, color: COLORS.muted }}>
-                No goals yet. Click "+ New Goal" to get started!
-              </div>
-            )}
           </div>
         )}
 
@@ -862,7 +881,7 @@ function Dashboard({ token, userName, onLogout }) {
                   { label: "Month 2", month: cmpMonth2, setMonth: setCmpMonth2, year: cmpYear2, setYear: setCmpYear2 }
                 ].map(m => (
                   <div key={m.label}>
-                    <label style={{ fontSize: 12, color: COLORS.muted, display: "block", marginBottom: 6 }}>{m.label}</label>
+                    <label style={{ fontSize: 12, color: "#A9BBC8", display: "block", marginBottom: 6 }}>{m.label}</label>
                     <select style={{ ...S.input, marginBottom: 8 }} value={m.month} onChange={e => m.setMonth(e.target.value)}>
                       <option value="">Select Month</option>
                       {MONTHS.map((mn, i) => <option key={mn} value={i + 1}>{mn}</option>)}
@@ -886,9 +905,9 @@ function Dashboard({ token, userName, onLogout }) {
                   ].map(item => (
                     <div key={item.label} style={S.statCard}>
                       <div style={S.statLabel}>{item.label}</div>
-                      <div style={{ fontSize: 13, marginTop: 4 }}>{comparison.month1_name}: <strong>₹{item.v1.toLocaleString()}</strong></div>
-                      <div style={{ fontSize: 13 }}>{comparison.month2_name}: <strong>₹{item.v2.toLocaleString()}</strong></div>
-                      <div style={{ fontSize: 14, fontWeight: 700, marginTop: 4, color: item.change > 0 ? COLORS.success : COLORS.danger }}>
+                      <div style={{ fontSize: 12, marginTop: 6, color: "#202E44" }}>{comparison.month1_name}: <strong>₹{item.v1.toLocaleString()}</strong></div>
+                      <div style={{ fontSize: 12, color: "#202E44" }}>{comparison.month2_name}: <strong>₹{item.v2.toLocaleString()}</strong></div>
+                      <div style={{ fontSize: 16, fontWeight: 700, marginTop: 6, color: item.change > 0 ? COLORS.success : COLORS.danger }}>
                         {item.change > 0 ? '▲' : '▼'} {Math.abs(item.change)}%
                       </div>
                     </div>
@@ -900,16 +919,16 @@ function Dashboard({ token, userName, onLogout }) {
                   {comparison.category_comparison.map(cat => (
                     <div key={cat.category} style={{ marginBottom: 14 }}>
                       <div style={{ display: "flex", justifyContent: "space-between", fontSize: 13, marginBottom: 4 }}>
-                        <span style={{ fontWeight: 500 }}>{cat.category}</span>
+                        <span style={{ fontWeight: 500, color: "#202E44" }}>{cat.category}</span>
                         <span style={{ color: cat.trend === 'up' ? COLORS.danger : COLORS.success, fontWeight: 600 }}>
                           {cat.trend === 'up' ? '▲' : '▼'} {Math.abs(cat.change_pct)}%
                         </span>
                       </div>
-                      <div style={{ fontSize: 11, color: COLORS.muted, marginBottom: 4 }}>
+                      <div style={{ fontSize: 11, color: "#A9BBC8", marginBottom: 4 }}>
                         {comparison.month1_name}: ₹{cat.month1_amount.toLocaleString()} → {comparison.month2_name}: ₹{cat.month2_amount.toLocaleString()}
                       </div>
                       <div style={{ display: "flex", gap: 4, height: 6 }}>
-                        <div style={{ flex: cat.month1_amount || 1, background: COLORS.accent, borderRadius: 3 }} />
+                        <div style={{ flex: cat.month1_amount || 1, background: "#A9BBC8", borderRadius: 3 }} />
                         <div style={{ flex: cat.month2_amount || 1, background: cat.trend === 'up' ? COLORS.danger : COLORS.success, borderRadius: 3 }} />
                       </div>
                     </div>
