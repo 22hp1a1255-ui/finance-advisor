@@ -1,5 +1,12 @@
 import { useState } from "react";
 import axios from "axios";
+import {
+  SignedIn,
+  SignedOut,
+  SignIn,
+  useUser,
+  useAuth
+} from "@clerk/clerk-react";
 
 const API = "https://finance-advisor-backend-okeg.onrender.com/api/v1";
 
@@ -944,13 +951,78 @@ function Dashboard({ token, userName, onLogout }) {
   );
 }
 
+function DashboardWrapper() {
+  const { user } = useUser();
+  const { getToken } = useAuth();
+  const [apiToken, setApiToken] = useState(null);
+
+  const syncUser = async () => {
+    try {
+      const clerkToken = await getToken();
+      const res = await axios.post(`${API}/auth/clerk-sync`, {
+        clerk_id: user.id,
+        name: user.fullName || user.username || "User",
+        email: user.primaryEmailAddress?.emailAddress || ""
+      }, {
+        headers: { Authorization: `Bearer ${clerkToken}` }
+      });
+      setApiToken(res.data.token);
+    } catch (e) {
+      console.error("Sync failed", e);
+    }
+  };
+
+  if (!apiToken) {
+    return (
+      <div style={{
+        minHeight: "100vh",
+        background: "#F2F2EB",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        flexDirection: "column",
+        gap: 16,
+        fontFamily: "'Inter', sans-serif"
+      }}>
+        <div style={{ fontSize: 40 }}>💰</div>
+        <div style={{ fontSize: 18, fontWeight: 600, color: "#202E44" }}>
+          Welcome, {user?.firstName || "there"}!
+        </div>
+        <button style={S.btn} onClick={syncUser}>
+          Enter Finance Advisor
+        </button>
+      </div>
+    );
+  }
+
+  return (
+    <Dashboard
+      token={apiToken}
+      userName={user?.fullName || user?.username || "User"}
+      onLogout={() => setApiToken(null)}
+    />
+  );
+}
+
 // ─── APP ROOT ─────────────────────────────────────────────────────────────────
 export default function App() {
-  const [token, setToken] = useState(null);
-  const [userName, setUserName] = useState("");
-  const handleLogin = (token, name) => { setToken(token); setUserName(name); };
-  const handleLogout = () => { setToken(null); setUserName(""); };
-  return token
-    ? <Dashboard token={token} userName={userName} onLogout={handleLogout} />
-    : <Login onLogin={handleLogin} />;
+  return (
+    <>
+      <SignedOut>
+        <div style={{
+          minHeight: "100vh",
+          background: `linear-gradient(135deg, #202E44 0%, #A9BBC8 60%, #F2F2EB 100%)`,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          fontFamily: "'Inter', sans-serif"
+        }}>
+          <SignIn />
+        </div>
+      </SignedOut>
+      <SignedIn>
+        <DashboardWrapper />
+      </SignedIn>
+    </>
+  );
 }
