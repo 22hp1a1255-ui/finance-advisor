@@ -45,6 +45,7 @@ def get_profile():
         "income_estimate": user.income_estimate,
         "created_at": user.created_at.isoformat()
     }), 200
+
 @auth_bp.route('/clerk-sync', methods=['POST'])
 def clerk_sync():
     data = request.get_json(force=True, silent=True)
@@ -52,25 +53,27 @@ def clerk_sync():
         return jsonify({"error": "Invalid data"}), 400
 
     clerk_id = data.get('clerk_id')
-    name = data.get('name', '')
-    email = data.get('email', '')
+    name = data.get('name', 'User')
 
     if not clerk_id:
         return jsonify({"error": "clerk_id required"}), 400
 
-    # Find or create user by clerk_id used as phone_number
-    user = User.query.filter_by(phone_number=clerk_id).first()
-    if not user:
-        user = User(
-            phone_number=clerk_id,
-            name=name
-        )
-        db.session.add(user)
-        db.session.commit()
+    try:
+        user = User.query.filter_by(phone_number=clerk_id).first()
+        if not user:
+            user = User(
+                phone_number=clerk_id,
+                name=name
+            )
+            db.session.add(user)
+            db.session.commit()
 
-    token = create_access_token(identity=user.id)
-    return jsonify({
-        "token": token,
-        "user_id": user.id,
-        "name": name
-    }), 200
+        token = create_access_token(identity=user.id)
+        return jsonify({
+            "token": token,
+            "user_id": user.id,
+            "name": name
+        }), 200
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
