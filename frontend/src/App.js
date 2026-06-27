@@ -212,8 +212,6 @@ const MONTHS = ['January','February','March','April','May','June',
 const CATEGORIES = ['Food','Transport','Entertainment','Utilities',
   'Healthcare','Shopping','Finance','Education','Income'];
 
-// ─── LOGIN ────────────────────────────────────────────────────────────────────
-#empty
 
 // ─── DASHBOARD ────────────────────────────────────────────────────────────────
 function Dashboard({ token, userName, onLogout }) {
