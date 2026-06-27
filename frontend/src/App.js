@@ -887,8 +887,13 @@ function DashboardWrapper() {
   const { user } = useUser();
   const { getToken } = useAuth();
   const [apiToken, setApiToken] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   const syncUser = async () => {
+    if (loading) return;
+    setLoading(true);
+    setError(null);
     try {
       const clerkToken = await getToken();
       const res = await axios.post(`${API}/auth/clerk-sync`, {
@@ -901,6 +906,9 @@ function DashboardWrapper() {
       setApiToken(res.data.token);
     } catch (e) {
       console.error("Sync failed", e);
+      setError("Connection failed. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -920,8 +928,15 @@ function DashboardWrapper() {
         <div style={{ fontSize: 18, fontWeight: 600, color: "#202E44" }}>
           Welcome, {user?.firstName || "there"}!
         </div>
-        <button style={S.btn} onClick={syncUser}>
-          Enter Finance Advisor
+        {error && (
+          <div style={{ color: "#ef4444", fontSize: 13 }}>{error}</div>
+        )}
+        <button
+          style={{ ...S.btn, opacity: loading ? 0.6 : 1 }}
+          onClick={syncUser}
+          disabled={loading}
+        >
+          {loading ? "Connecting..." : "Enter Finance Advisor"}
         </button>
       </div>
     );
