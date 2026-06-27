@@ -4,8 +4,7 @@ import {
   SignedIn,
   SignedOut,
   SignIn,
-  useUser,
-  useAuth
+  useUser
 } from "@clerk/clerk-react";
 
 const API = "https://finance-advisor-backend-okeg.onrender.com/api/v1";
@@ -885,7 +884,7 @@ function Dashboard({ token, userName, onLogout }) {
 
 function DashboardWrapper() {
   const { user, isLoaded } = useUser();
-  const { getToken } = useAuth();
+  const { } = useAuth();
   const [apiToken, setApiToken] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
