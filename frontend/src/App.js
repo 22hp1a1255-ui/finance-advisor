@@ -213,73 +213,7 @@ const CATEGORIES = ['Food','Transport','Entertainment','Utilities',
   'Healthcare','Shopping','Finance','Education','Income'];
 
 // ─── LOGIN ────────────────────────────────────────────────────────────────────
-function Login({ onLogin }) {
-  const [phone, setPhone] = useState("");
-  const [name, setName] = useState("");
-  const [isSignup, setIsSignup] = useState(false);
-
-  const handleLogin = async () => {
-    try {
-      const res = await axios.post(`${API}/auth/login`, { phone_number: phone });
-      onLogin(res.data.token, name || phone);
-    } catch { alert("User not found. Please sign up first."); }
-  };
-
-  const handleSignup = async () => {
-    try {
-      const res = await axios.post(`${API}/auth/signup`, { phone_number: phone, name });
-      onLogin(res.data.token, name || phone);
-    } catch { alert("Signup failed. Try a different phone number."); }
-  };
-
-  return (
-    <div style={{
-      minHeight: "100vh",
-      background: `linear-gradient(135deg, #202E44 0%, #A9BBC8 60%, #F2F2EB 100%)`,
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      fontFamily: "'Inter', sans-serif"
-    }}>
-      <div style={{
-        background: "#ffffff",
-        border: `1px solid #C7BCAB`,
-        borderRadius: 20,
-        padding: "40px 36px",
-        width: 360,
-        boxShadow: "0 8px 32px #202E4422"
-      }}>
-        <div style={{ textAlign: "center", marginBottom: 32 }}>
-          <div style={{ fontSize: 40, marginBottom: 8 }}>💰</div>
-          <div style={{ fontSize: 22, fontWeight: 700, color: "#202E44" }}>Finance Advisor</div>
-          <div style={{ fontSize: 13, color: "#A9BBC8", marginTop: 4 }}>
-            AI-powered personal finance
-          </div>
-        </div>
-
-        {isSignup && (
-          <input style={S.input} placeholder="Your name"
-            value={name} onChange={e => setName(e.target.value)} />
-        )}
-        <input style={S.input} placeholder="Phone number"
-          value={phone} onChange={e => setPhone(e.target.value)} />
-
-        <button style={{ ...S.btn, width: "100%", marginRight: 0, padding: "12px", fontSize: 14 }}
-          onClick={isSignup ? handleSignup : handleLogin}>
-          {isSignup ? "Create Account" : "Sign In"}
-        </button>
-
-        <p style={{ textAlign: "center", marginTop: 16, fontSize: 13, color: "#A9BBC8" }}>
-          {isSignup ? "Already have an account? " : "New here? "}
-          <span style={{ color: "#8B734C", cursor: "pointer", fontWeight: 500 }}
-            onClick={() => setIsSignup(!isSignup)}>
-            {isSignup ? "Sign In" : "Sign Up"}
-          </span>
-        </p>
-      </div>
-    </div>
-  );
-}
+#empty
 
 // ─── DASHBOARD ────────────────────────────────────────────────────────────────
 function Dashboard({ token, userName, onLogout }) {
