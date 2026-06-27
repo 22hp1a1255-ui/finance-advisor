@@ -884,7 +884,7 @@ function Dashboard({ token, userName, onLogout }) {
 }
 
 function DashboardWrapper() {
-  const { user } = useUser();
+  const { user, isLoaded } = useUser();
   const { getToken } = useAuth();
   const [apiToken, setApiToken] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -895,13 +895,9 @@ function DashboardWrapper() {
     setLoading(true);
     setError(null);
     try {
-      const clerkToken = await getToken();
       const res = await axios.post(`${API}/auth/clerk-sync`, {
         clerk_id: user.id,
-        name: user.fullName || user.username || "User",
-        email: user.primaryEmailAddress?.emailAddress || ""
-      }, {
-        headers: { Authorization: `Bearer ${clerkToken}` }
+        name: user.fullName || user.username || "User"
       });
       setApiToken(res.data.token);
     } catch (e) {
@@ -911,6 +907,14 @@ function DashboardWrapper() {
       setLoading(false);
     }
   };
+
+  if (!isLoaded) {
+    return (
+      <div style={{ minHeight: "100vh", background: "#F2F2EB", display: "flex", alignItems: "center", justifyContent: "center" }}>
+        <div style={{ color: "#202E44", fontSize: 16 }}>Loading...</div>
+      </div>
+    );
+  }
 
   if (!apiToken) {
     return (
